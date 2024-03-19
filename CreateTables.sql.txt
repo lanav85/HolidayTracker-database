@@ -1,28 +1,39 @@
 CREATE TABLE Users (
-    ID SERIAL PRIMARY KEY,
-    Email VARCHAR(255) UNIQUE,
-    Department VARCHAR(255),
+    UserID SERIAL PRIMARY KEY,
     Data JSONB,
-    ManagerID INTEGER REFERENCES Users(ID),
-    UserType VARCHAR(50),
-    HoursAllowance INTEGER
+    Email VARCHAR(255) UNIQUE,
+    HolidayEntitlement INTEGER,
+    DepartmentID INT,
+    RoleID INTEGER,
+    FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID),
+    FOREIGN KEY (RoleID) REFERENCES Role(RoleID)
 );
-
 --------------------------------------------------------------------------------------
 
-CREATE TABLE UserInvites(
- InviteID SERIAL PRIMARY KEY,
-    Email VARCHAR (255),
-    ManagerID INTEGER REFERENCES Users(ID),
-	RequestStatus VARCHAR (30)
-	);
+CREATE TABLE Role(
+    RoleID INT PRIMARY KEY,
+    Level CHAR(1),
+    RoleDescription VARCHAR(50),
+    Approves INT
+);
+ 
 
 --------------------------------------------------------------------------------------
 	
-CREATE TABLE HolidaysRequests (
-    HolidayRequestID SERIAL PRIMARY KEY,
-    Data JSONB, 
-    ID INTEGER REFERENCES Users(ID),
-    ManagerID INTEGER REFERENCES Users(ManagerID),
-    RequestStatus VARCHAR(30)
+CREATE TABLE Requests (
+    RequestID SERIAL PRIMARY KEY,
+    UserID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    RequestFrom DATE,
+    RequestTo DATE,
+    Status VARCHAR(20)
+
+    );
+--------------------------------------------------------------------------------------
+
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50),
+    UserID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
